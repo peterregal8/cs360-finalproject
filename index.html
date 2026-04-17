@@ -6,7 +6,7 @@
 </title>
 </head>
 <body>
-<div id="intro" style="height: 400px; width: 2400px;">
+<div id="intro" style="height: 400px; width: 1200px;">
     <h1>Student Health: A Case Study of Portugal</h1>
 
     <h2>Peter Regalbuto</h2> <br><br>
@@ -24,9 +24,10 @@
 </div>
 <div id="container" style="display: flex;">
     <div id="histogram" style="height: 500px; width: 850px;"></div>
-    <div id="splom" style="height: 1600px; width: 1600px;"></div>
 </div>
+<div id="padding" style="height: 50px; width: 850px"></div>
 <div id="title"></div>
+<svg id="splom"></svg>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
@@ -124,7 +125,121 @@
             .attr("width", 70);
     });
 
-// Code adapted from post on edStem on 2/24/2026 (https://edstem.org/us/courses/91852/discussion/7725451)  
+    // Code adapted from post on edStem on 2/24/2026 (https://edstem.org/us/courses/91852/discussion/7725451)  
+    const cellSize = 250;
+    const padding  = 100;
+
+    d3.csv("student-mat.csv", function(data) {
+    return {
+        Free_Time : +data["freetime"],
+        Going_Out : +data["goout"],
+        Family_Relation : +data["famrel"]
+    };
+    }).then(data => {
+        const cols = Object.keys(data[0]);
+        const n    = cols.length;
+        const size = n * cellSize;
+
+        const title = d3.select("title")
+            .attr("width",  100)
+            .attr("height", 100)
+            .append("g")
+            .attr("transform", `translate(${25},${25})`);
+
+
+        const svg = d3.select("#splom")
+            .attr("width",  size + padding)
+            .attr("height", size + padding)
+            .append("g")
+            .attr("transform", `translate(${padding / 2},${padding / 2})`);
+
+        // One linear scale per column
+        const scales = {};
+        const scalesY = {};
+        cols.forEach(col => {
+            scales[col] = d3.scaleLinear()
+                .domain(d3.extent(data, d => d[col])).nice()
+                .range([10, cellSize - 10]);
+            scalesY[col] = d3.scaleLinear()
+                .domain(d3.extent(data, d => d[col])).nice()
+                .range([cellSize - 10, 10]);
+        });
+
+        svg.append("text")
+            .attr("x", width / 4)
+            .attr("y", 0)
+            .style("font-family", "Helvetica")
+            .text("Scatterplot Matrix of Students' Time and Priority Management");
+
+        // X axes
+
+        cols.forEach((yCol, row) => {
+            cols.forEach((xCol, col) => {
+            const g = svg.append("g")
+                    .attr("transform", `translate(${col * cellSize},${(row + 1) * cellSize + 20})`)
+                    .attr("class", "axis axis-x");
+                if (!(row === col || (row === 0 && col === 2) || (row === 1 && col === 0))) {
+                    g.call(d3.axisBottom(scales[xCol]).ticks(6));
+                }
+            });
+        });
+
+        // Y axes
+
+        cols.forEach((yCol, row) => {
+            cols.forEach((xCol, col) => {
+            const g = svg.append("g")
+                    .attr("transform", `translate(${col * cellSize},${(row) * cellSize + 20})`)
+                    .attr("class", "axis axis-x");
+                if (row === col) {
+                } else if (col == 2 || (col == 1 && row == 2)) {
+                g.attr("transform", `translate(${(col + 1) * cellSize},${(row) * cellSize + 20})`)
+                g.call(d3.axisRight(scalesY[yCol]).ticks(6));
+                } else {
+                g.call(d3.axisLeft(scalesY[yCol]).ticks(6));
+                }
+            });
+        });
+
+        // Draw one cell per (row, col) pair
+        cols.forEach((yCol, row) => {
+            cols.forEach((xCol, col) => {
+            const g = svg.append("g")
+                .attr("transform", `translate(${col * cellSize},${row * cellSize + 20})`);
+
+            // Cell border
+            g.append("rect")
+                .attr("width",  cellSize)
+                .attr("height", cellSize)
+                .attr("fill", "none")
+                .attr("stroke", "#aaa");
+
+            if (row === col) {
+                // Diagonal: just show the variable name
+                g.append("text")
+                .attr("x", cellSize / 2)
+                .attr("y", cellSize / 2)
+                .attr("text-anchor", "middle")
+                .attr("dominant-baseline", "middle")
+                .attr("font-size", "12px")
+                .style("font-family", "Helvetica")
+                .text(xCol);
+            } else {
+
+                // Off-diagonal: scatter plot
+
+                g.selectAll("circle")
+                .data(data)
+                .join("circle")
+                .attr("cx", d => scales[xCol](d[xCol]) + (Math.random() - 0.5) * 15)
+                .attr("cy", d => scalesY[yCol](d[yCol]) + (Math.random() - 0.5) * 15)
+                .attr("r", 2)
+                .attr("fill", "orangered")
+                .attr("opacity", 0.6);
+            }
+            });
+        });
+    });
 </script>
 </body>
 </html>
