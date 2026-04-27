@@ -1,245 +1,492 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<!--
+	Story by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
 <head>
-<meta charset="UTF-8">
-<title>CS 360 Final Project
-</title>
+	<title>Story by HTML5 UP</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<noscript>
+		<link rel="stylesheet" href="assets/css/noscript.css" />
+	</noscript>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 </head>
-<body>
-<div id="intro" style="height: 400px; width: 1200px;">
-    <h1>Student Health: A Case Study of Portugal</h1>
 
-    <h2>Peter Regalbuto</h2> <br><br>
+<body class="is-preload">
 
-    Project Description: This project will explore a dataset of 395 Portuguese
-    students attending one of two secondary schools. The project aims to answer the following questions: 
+	<!-- Wrapper -->
+	<div id="wrapper" class="divided">
 
-    <ul>1) What is the distribution of all students in the dataset by age?</ul>
-    <ul>2) How do parents’ education levels correlate with how much their children study?</ul>
-    <ul>3) How are students balancing their time between relaxing, hanging out with friends, and spending time with family?</ul>
-    <ul>4) How does students’ alcohol consumption compare with how they self-rate their health?</ul>
+		<section class="banner style1 fullscreen orient-right content-align-left image-position-center onscroll-image-fade-in onload-content-fade-in"
+			id="first">
+			<div class="content">
+				<h1>Magna etiam feugiat</h1>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id ante sed ex pharetra lacinia sit
+					amet vel massa. Donec facilisis laoreet nulla eu bibendum. Donec ut ex risus. Fusce lorem lectus,
+					pharetra pretium massa et, hendrerit vestibulum odio lorem ipsum dolor sit amet.</p>
+			</div>
+		</section>
 
-    I am aiming to learn more about some external factors that may be affecting students and the methods
-    they use to cope with internal and external stressors.
-</div>
-<div id="container" style="display: flex;">
-    <div id="histogram" style="height: 500px; width: 850px;"></div>
-</div>
-<div id="padding" style="height: 50px; width: 850px"></div>
-<div id="title"></div>
-<svg id="splom"></svg>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
-<script>
+		<!-- One -->
+		<section
+			class="banner style1 orient-left content-align-left image-position-right fullscreen onscroll-image-fade-in onscroll-content-fade-right">
+			<div class="content">
+				<h1>Story</h1>
+				<p class="major">A (modular, highly tweakable) responsive one-page template designed by <a
+						href="https://html5up.net">HTML5 UP</a> and released for free under the <a
+						href="https://html5up.net/license">Creative Commons</a>.</p>
+				<ul class="actions stacked">
+					<li><a href="#first" class="button big wide smooth-scroll-middle">Get Started</a></li>
+				</ul>
+			</div>
+			<div class="image" style="display:flex; align-items:center; justify-content:center; background:#ffffff;">
+				<div id="banner-histogram"></div>
+				<script>
+					(function () {
+						const ages = new Map();
 
+						const svgWidth = 800;
+						const svgHeight = 500;
+						const margin = { top: 40, right: 70, bottom: 60, left: 100 };
+						const width = svgWidth - margin.left - margin.right;
+						const height = svgHeight - margin.top - margin.bottom;
 
-    const ages = new Map();
+						d3.csv("student-mat.csv", function (data) {
+							return { age: +data["age"] };
+						}).then(function (dataset) {
 
-    const svgWidth = 850;
-    const svgHeight = 500;
-    const margin = { top: 40, right: 70, bottom: 60, left: 100 };
-    const width = svgWidth - margin.left - margin.right;
-    const height = svgHeight - margin.top - margin.bottom;
+							dataset.forEach(d => {
+								if (ages.has(d.age)) {
+									ages.set(d.age, ages.get(d.age) + 1);
+								} else {
+									ages.set(d.age, 1);
+								}
+							});
 
-    const formatTime = d3.utcFormat("%Y");
+							const svg = d3.select("#banner-histogram")
+								.append("svg")
+								.attr("width", svgWidth)
+								.attr("height", svgHeight);
 
+							const chart = svg.append("g")
+								.attr("transform", `translate(${margin.left},${margin.top})`);
 
-    d3.csv("student-mat.csv", function(data) {
-        return {
-            age : +data["age"],
-        };
-    }).then(function(dataset) {
+							svg.append("text")
+								.attr("x", 100)
+								.attr("y", margin.top / 2)
+								.style("font-family", "Helvetica")
+								//.style("fill", "#e0e0e0")
+								.style("font-size", "16px")
+								.text("Distribution of Student Ages in Gabriel Pereira and Mousinho da Silveira Secondary Schools");
 
-        dataset.forEach(d => {
-            if (ages.has(d.age)) {
-                ages.set(d.age, ages.get(d.age) + 1);
-            } else {
-                ages.set(d.age, 1);
-            }
-        })
+							svg.append("text")
+								.attr("x", width / 1.8)
+								.attr("y", svgHeight - margin.bottom + 50)
+								.style("font-family", "Helvetica")
+								//.style("fill", "#e0e0e0")
+								.text("Age");
 
-        console.log(ages);
+							svg.append("text")
+								.attr("x", 100)
+								.attr("y", margin.top / 2)
+								.attr("transform", "rotate(270, 210, 165)")
+								.style("font-family", "Helvetica")
+								//.style("fill", "#e0e0e0")
+								.text("# of Students");
 
-        const svg = d3.select("#histogram")
-            .append("svg")
-            .attr("width", svgWidth)
-            .attr("height", svgHeight);
+							const scaleX = d3.scaleLinear()
+								.domain([d3.min(ages, a => a[0]) - 1, d3.max(ages, a => a[0]) + 1])
+								.range([0, width]);
 
-        const chart = svg.append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
+							const scaleY = d3.scaleLinear()
+								.domain([0, Math.ceil(d3.max(ages, a => a[1]) / 10) * 10])
+								.range([height, 0]);
 
+							const xAxis = d3.axisBottom(scaleX);
 
-        svg.append("text")
-            .attr("x", 100)
-            .attr("y", margin.top / 2)
-            .style("font-family", "Helvetica")
-            .text("Distribution of Student Ages in Gabriel Pereira and Mousinho da Silveira Secondary Schools");
+							chart.append("g")
+								.attr("class", "axis axis-x")
+								.attr("transform", `translate(0, ${height})`)
+								.call(xAxis)
+								//.selectAll("text, line, path")
+								//.style("stroke", "#e0e0e0")
+								//.style("fill", "#e0e0e0");
 
-        svg.append("text")
-            .attr("x", width / 1.8)
-            .attr("y", svgHeight - margin.bottom + 50)
-            .style("font-family", "Helvetica")
-            .text("Age");
+							chart.append("g")
+								.attr("class", "axis axis-y")
+								.call(d3.axisLeft(scaleY).ticks(11))
+								//.selectAll("text, line, path")
+								//.style("stroke", "#e0e0e0")
+								//.style("fill", "#e0e0e0");
 
-        svg.append("text")
-            .attr("x", 100)
-            .attr("y", margin.top / 2)
-            .attr("transform", "rotate(270, 210, 165)")
-            .style("font-family", "Helvetica")
-            .text("# of Students");
+							chart.selectAll(".bar")
+								.data(ages)
+								.enter()
+								.append("rect")
+								.attr("class", "bar")
+								.attr("y", d => scaleY(d[1]))
+								.attr("x", d => scaleX(d[0]) - 30)
+								.attr("fill", "lightblue")
+								.attr("height", d => height - scaleY(d[1]))
+								.attr("width", 60);
+						});
+					})();
+				</script>
+			</div>
+		</section>
 
-        console.log(d3.min(ages, d => d[0]) - 1);
-        console.log(d3.max(ages, d => d[0]) + 1);
-        // Scaling 
-        const scaleX = d3.scaleLinear()
-            .domain([d3.min(ages, a => a[0]) - 1, d3.max(ages, a => a[0]) + 1])
-            .range([0, width]);
+		<!-- Two -->
+		<section class="spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in"
+			id="first">
+			<div class="content">
+				<h2>Magna etiam feugiat</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id ante sed ex pharetra lacinia sit
+					amet vel massa. Donec facilisis laoreet nulla eu bibendum. Donec ut ex risus. Fusce lorem lectus,
+					pharetra pretium massa et, hendrerit vestibulum odio lorem ipsum dolor sit amet.</p>
+				<ul class="actions stacked">
+					<li><a href="#" class="button">Learn More</a></li>
+				</ul>
+			</div>
+			<div class="image">
+				<img src="images/spotlight01.jpg" alt="" />
+			</div>
+		</section>
 
+		<!-- Three -->
+		<section class="spotlight style1 orient-left content-align-left image-position-center onscroll-image-fade-in">
+			<div class="content">
+				<h2>Tempus adipiscing</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id ante sed ex pharetra lacinia sit
+					amet vel massa. Donec facilisis laoreet nulla eu bibendum. Donec ut ex risus. Fusce lorem lectus,
+					pharetra pretium massa et, hendrerit vestibulum odio lorem ipsum dolor sit amet.</p>
+				<ul class="actions stacked">
+					<li><a href="#" class="button">Learn More</a></li>
+				</ul>
+			</div>
+			<div class="image">
+				<img src="images/spotlight02.jpg" alt="" />
+			</div>
+		</section>
 
-        const scaleY = d3.scaleLinear()
-            .domain([0, Math.ceil(d3.max(ages, a => a[1]) / 10) * 10])  
-            .range([height, 0]);
+		<!-- Four -->
+		<section class="spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in">
+			<div class="content">
+				<h2>Pharetra etiam nulla</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id ante sed ex pharetra lacinia sit
+					amet vel massa. Donec facilisis laoreet nulla eu bibendum. Donec ut ex risus. Fusce lorem lectus,
+					pharetra pretium massa et, hendrerit vestibulum odio lorem ipsum dolor sit amet.</p>
+				<ul class="actions stacked">
+					<li><a href="#" class="button">Learn More</a></li>
+				</ul>
+			</div>
+			<div class="image">
+				<img src="images/spotlight03.jpg" alt="" />
+			</div>
+		</section>
 
+		<!-- Five -->
+		<section class="wrapper style1 align-center">
+			<div class="inner">
+				<h2>Massa sed condimentum</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id ante sed ex pharetra lacinia sit
+					amet vel massa. Donec facilisis laoreet nulla eu bibendum. Donec ut ex risus. Fusce lorem lectus,
+					pharetra pretium massa et, hendrerit vestibulum odio lorem ipsum.</p>
+			</div>
 
-        var xAxis = d3.axisBottom(scaleX); 
+			<!-- Gallery -->
+			<div class="gallery style2 medium lightbox onscroll-fade-in">
+				<article>
+					<a href="images/gallery/fulls/01.jpg" class="image">
+						<img src="images/gallery/thumbs/01.jpg" alt="" />
+					</a>
+					<div class="caption">
+						<h3>Ipsum Dolor</h3>
+						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
+						<ul class="actions fixed">
+							<li><span class="button small">Details</span></li>
+						</ul>
+					</div>
+				</article>
+				<article>
+					<a href="images/gallery/fulls/02.jpg" class="image">
+						<img src="images/gallery/thumbs/02.jpg" alt="" />
+					</a>
+					<div class="caption">
+						<h3>Feugiat Lorem</h3>
+						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
+						<ul class="actions fixed">
+							<li><span class="button small">Details</span></li>
+						</ul>
+					</div>
+				</article>
+				<article>
+					<a href="images/gallery/fulls/03.jpg" class="image">
+						<img src="images/gallery/thumbs/03.jpg" alt="" />
+					</a>
+					<div class="caption">
+						<h3>Magna Amet</h3>
+						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
+						<ul class="actions fixed">
+							<li><span class="button small">Details</span></li>
+						</ul>
+					</div>
+				</article>
+				<article>
+					<a href="images/gallery/fulls/04.jpg" class="image">
+						<img src="images/gallery/thumbs/04.jpg" alt="" />
+					</a>
+					<div class="caption">
+						<h3>Sed Tempus</h3>
+						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
+						<ul class="actions fixed">
+							<li><span class="button small">Details</span></li>
+						</ul>
+					</div>
+				</article>
+				<article>
+					<a href="images/gallery/fulls/05.jpg" class="image">
+						<img src="images/gallery/thumbs/05.jpg" alt="" />
+					</a>
+					<div class="caption">
+						<h3>Ultrices Magna</h3>
+						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
+						<ul class="actions fixed">
+							<li><span class="button small">Details</span></li>
+						</ul>
+					</div>
+				</article>
+				<article>
+					<a href="images/gallery/fulls/06.jpg" class="image">
+						<img src="images/gallery/thumbs/06.jpg" alt="" />
+					</a>
+					<div class="caption">
+						<h3>Sed Tempus</h3>
+						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
+						<ul class="actions fixed">
+							<li><span class="button small">Details</span></li>
+						</ul>
+					</div>
+				</article>
+				<article>
+					<a href="images/gallery/fulls/07.jpg" class="image">
+						<img src="images/gallery/thumbs/07.jpg" alt="" />
+					</a>
+					<div class="caption">
+						<h3>Ipsum Lorem</h3>
+						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
+						<ul class="actions fixed">
+							<li><span class="button small">Details</span></li>
+						</ul>
+					</div>
+				</article>
+				<article>
+					<a href="images/gallery/fulls/08.jpg" class="image">
+						<img src="images/gallery/thumbs/08.jpg" alt="" />
+					</a>
+					<div class="caption">
+						<h3>Magna Risus</h3>
+						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
+						<ul class="actions fixed">
+							<li><span class="button small">Details</span></li>
+						</ul>
+					</div>
+				</article>
+				<article>
+					<a href="images/gallery/fulls/09.jpg" class="image">
+						<img src="images/gallery/thumbs/09.jpg" alt="" />
+					</a>
+					<div class="caption">
+						<h3>Tempus Dolor</h3>
+						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
+						<ul class="actions fixed">
+							<li><span class="button small">Details</span></li>
+						</ul>
+					</div>
+				</article>
+				<article>
+					<a href="images/gallery/fulls/10.jpg" class="image">
+						<img src="images/gallery/thumbs/10.jpg" alt="" />
+					</a>
+					<div class="caption">
+						<h3>Sed Etiam</h3>
+						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
+						<ul class="actions fixed">
+							<li><span class="button small">Details</span></li>
+						</ul>
+					</div>
+				</article>
+				<article>
+					<a href="images/gallery/fulls/11.jpg" class="image">
+						<img src="images/gallery/thumbs/11.jpg" alt="" />
+					</a>
+					<div class="caption">
+						<h3>Magna Lorem</h3>
+						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
+						<ul class="actions fixed">
+							<li><span class="button small">Details</span></li>
+						</ul>
+					</div>
+				</article>
+				<article>
+					<a href="images/gallery/fulls/12.jpg" class="image">
+						<img src="images/gallery/thumbs/12.jpg" alt="" />
+					</a>
+					<div class="caption">
+						<h3>Ipsum Dolor</h3>
+						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
+						<ul class="actions fixed">
+							<li><span class="button small">Details</span></li>
+						</ul>
+					</div>
+				</article>
+			</div>
 
-        chart.append("g")
-            .attr("class", "axis axis-x")
-            .attr("transform", `translate(0, ${height})`)
-            .call(xAxis);
+		</section>
 
-        chart.append("g")
-            .attr("class", "axis axis-y")
-            .call(d3.axisLeft(scaleY).ticks(11));
-        
-        chart.selectAll(".bar")
-            .data(ages)
-            .enter()
-            .append("rect")
-            .attr("class", "bar")
-            .attr("y", d => scaleY(d[1]))
-            .attr("x", d => scaleX(d[0]) - 35)
-            .attr("fill", "lightblue")
-            .attr("height", d => height - scaleY(d[1]))
-            .attr("width", 70);
-    });
+		<!-- Six -->
+		<section class="wrapper style1 align-center">
+			<div class="inner">
+				<h2>Ipsum sed consequat</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id ante sed ex pharetra lacinia sit
+					amet vel massa. Donec facilisis laoreet nulla eu bibendum. Donec ut ex risus. Fusce lorem lectus,
+					pharetra pretium massa et, hendrerit vestibulum odio lorem ipsum.</p>
+				<div class="items style1 medium onscroll-fade-in">
+					<section>
+						<span class="icon style2 major fa-gem"></span>
+						<h3>Lorem</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
+							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
+					</section>
+					<section>
+						<span class="icon solid style2 major fa-save"></span>
+						<h3>Ipsum</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
+							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
+					</section>
+					<section>
+						<span class="icon solid style2 major fa-chart-bar"></span>
+						<h3>Dolor</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
+							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
+					</section>
+					<section>
+						<span class="icon solid style2 major fa-wifi"></span>
+						<h3>Amet</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
+							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
+					</section>
+					<section>
+						<span class="icon solid style2 major fa-cog"></span>
+						<h3>Magna</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
+							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
+					</section>
+					<section>
+						<span class="icon style2 major fa-paper-plane"></span>
+						<h3>Tempus</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
+							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
+					</section>
+					<section>
+						<span class="icon solid style2 major fa-desktop"></span>
+						<h3>Aliquam</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
+							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
+					</section>
+					<section>
+						<span class="icon solid style2 major fa-sync-alt"></span>
+						<h3>Elit</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
+							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
+					</section>
+					<section>
+						<span class="icon solid style2 major fa-hashtag"></span>
+						<h3>Morbi</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
+							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
+					</section>
+					<section>
+						<span class="icon solid style2 major fa-bolt"></span>
+						<h3>Turpis</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
+							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
+					</section>
+					<section>
+						<span class="icon solid style2 major fa-envelope"></span>
+						<h3>Ultrices</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
+							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
+					</section>
+					<section>
+						<span class="icon solid style2 major fa-leaf"></span>
+						<h3>Risus</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
+							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
+					</section>
+				</div>
+			</div>
+		</section>
 
-    // Code adapted from post on edStem on 2/24/2026 (https://edstem.org/us/courses/91852/discussion/7725451)  
-    const cellSize = 250;
-    const padding  = 100;
+		<!-- Seven -->
+		<section class="wrapper style1 align-center">
+			<div class="inner medium">
+				<h2>Get in touch</h2>
+				<form method="post" action="#">
+					<div class="fields">
+						<div class="field half">
+							<label for="name">Name</label>
+							<input type="text" name="name" id="name" value="" />
+						</div>
+						<div class="field half">
+							<label for="email">Email</label>
+							<input type="email" name="email" id="email" value="" />
+						</div>
+						<div class="field">
+							<label for="message">Message</label>
+							<textarea name="message" id="message" rows="6"></textarea>
+						</div>
+					</div>
+					<ul class="actions special">
+						<li><input type="submit" name="submit" id="submit" value="Send Message" /></li>
+					</ul>
+				</form>
 
-    d3.csv("student-mat.csv", function(data) {
-    return {
-        Free_Time : +data["freetime"],
-        Going_Out : +data["goout"],
-        Family_Relation : +data["famrel"]
-    };
-    }).then(data => {
-        const cols = Object.keys(data[0]);
-        const n    = cols.length;
-        const size = n * cellSize;
+			</div>
+		</section>
 
-        const title = d3.select("title")
-            .attr("width",  100)
-            .attr("height", 100)
-            .append("g")
-            .attr("transform", `translate(${25},${25})`);
+		<!-- Footer -->
+		<footer class="wrapper style1 align-center">
+			<div class="inner">
+				<ul class="icons">
+					<li><a href="#" class="icon brands style2 fa-twitter"><span class="label">Twitter</span></a></li>
+					<li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a>
+					</li>
+					<li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a>
+					</li>
+					<li><a href="#" class="icon brands style2 fa-linkedin-in"><span class="label">LinkedIn</span></a>
+					</li>
+					<li><a href="#" class="icon style2 fa-envelope"><span class="label">Email</span></a></li>
+				</ul>
+				<p>&copy; Untitled. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+			</div>
+		</footer>
 
+	</div>
 
-        const svg = d3.select("#splom")
-            .attr("width",  size + padding)
-            .attr("height", size + padding)
-            .append("g")
-            .attr("transform", `translate(${padding / 2},${padding / 2})`);
+	<!-- Scripts -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/jquery.scrollex.min.js"></script>
+	<script src="assets/js/jquery.scrolly.min.js"></script>
+	<script src="assets/js/browser.min.js"></script>
+	<script src="assets/js/breakpoints.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
 
-        // One linear scale per column
-        const scales = {};
-        const scalesY = {};
-        cols.forEach(col => {
-            scales[col] = d3.scaleLinear()
-                .domain(d3.extent(data, d => d[col])).nice()
-                .range([10, cellSize - 10]);
-            scalesY[col] = d3.scaleLinear()
-                .domain(d3.extent(data, d => d[col])).nice()
-                .range([cellSize - 10, 10]);
-        });
-
-        svg.append("text")
-            .attr("x", width / 4)
-            .attr("y", 0)
-            .style("font-family", "Helvetica")
-            .text("Scatterplot Matrix of Students' Time and Priority Management");
-
-        // X axes
-
-        cols.forEach((yCol, row) => {
-            cols.forEach((xCol, col) => {
-            const g = svg.append("g")
-                    .attr("transform", `translate(${col * cellSize},${(row + 1) * cellSize + 20})`)
-                    .attr("class", "axis axis-x");
-                if (!(row === col || (row === 0 && col === 2) || (row === 1 && col === 0))) {
-                    g.call(d3.axisBottom(scales[xCol]).ticks(6));
-                }
-            });
-        });
-
-        // Y axes
-
-        cols.forEach((yCol, row) => {
-            cols.forEach((xCol, col) => {
-            const g = svg.append("g")
-                    .attr("transform", `translate(${col * cellSize},${(row) * cellSize + 20})`)
-                    .attr("class", "axis axis-x");
-                if (row === col) {
-                } else if (col == 2 || (col == 1 && row == 2)) {
-                g.attr("transform", `translate(${(col + 1) * cellSize},${(row) * cellSize + 20})`)
-                g.call(d3.axisRight(scalesY[yCol]).ticks(6));
-                } else {
-                g.call(d3.axisLeft(scalesY[yCol]).ticks(6));
-                }
-            });
-        });
-
-        // Draw one cell per (row, col) pair
-        cols.forEach((yCol, row) => {
-            cols.forEach((xCol, col) => {
-            const g = svg.append("g")
-                .attr("transform", `translate(${col * cellSize},${row * cellSize + 20})`);
-
-            // Cell border
-            g.append("rect")
-                .attr("width",  cellSize)
-                .attr("height", cellSize)
-                .attr("fill", "none")
-                .attr("stroke", "#aaa");
-
-            if (row === col) {
-                // Diagonal: just show the variable name
-                g.append("text")
-                .attr("x", cellSize / 2)
-                .attr("y", cellSize / 2)
-                .attr("text-anchor", "middle")
-                .attr("dominant-baseline", "middle")
-                .attr("font-size", "12px")
-                .style("font-family", "Helvetica")
-                .text(xCol);
-            } else {
-
-                // Off-diagonal: scatter plot
-
-                g.selectAll("circle")
-                .data(data)
-                .join("circle")
-                .attr("cx", d => scales[xCol](d[xCol]) + (Math.random() - 0.5) * 15)
-                .attr("cy", d => scalesY[yCol](d[yCol]) + (Math.random() - 0.5) * 15)
-                .attr("r", 2)
-                .attr("fill", "orangered")
-                .attr("opacity", 0.6);
-            }
-            });
-        });
-    });
-</script>
 </body>
+
 </html>
