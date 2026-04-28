@@ -15,6 +15,26 @@
 		<link rel="stylesheet" href="assets/css/noscript.css" />
 	</noscript>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+	<style>
+		/* Tooltip styles */
+		.bar:hover {
+			stroke: black;
+			stroke-width: 2px;
+		}
+
+		.tooltip {
+			position: fixed;
+			background: rgba(0, 0, 0, 0.75);
+			color: #fff;
+			padding: 6px 10px;
+			border-radius: 4px;
+			font-size: 13px;
+			pointer-events: none;
+			opacity: 0;
+			transition: opacity 0.15s ease;
+		}
+	</style>
 </head>
 
 <body class="is-preload">
@@ -22,13 +42,17 @@
 	<!-- Wrapper -->
 	<div id="wrapper" class="divided">
 
-		<section class="banner style1 fullscreen orient-right content-align-left image-position-center onscroll-image-fade-in onload-content-fade-in"
+		<section
+			class="banner style1 fullscreen orient-right content-align-left image-position-center onscroll-image-fade-in onload-content-fade-in"
 			id="first">
-			<div class="content">
-				<h1>Magna etiam feugiat</h1>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id ante sed ex pharetra lacinia sit
-					amet vel massa. Donec facilisis laoreet nulla eu bibendum. Donec ut ex risus. Fusce lorem lectus,
-					pharetra pretium massa et, hendrerit vestibulum odio lorem ipsum dolor sit amet.</p>
+			<div class="content" style="width: 100%;">
+				<h1>Student Health: A Case Study of Portugal</h1>
+				<p>Education is a vital aspect of society. I'm interested in the state of education and 
+				student health around the world. As a college student myself, I know that there are a lot 
+				of external factors that affect one’s study habits as well as their inclination to use alcohol 
+				as a possible coping mechanism for dealing with stress. Let's explore a dataset of 395
+				students attending one of two Portuguese secondary schools, Gabriel Pereira and Mousinho da Silveira.</p>
+				<p>Made by Peter Regalbuto with help from <a href="https://html5up.net/story">HTML5UP</a></p>
 			</div>
 		</section>
 
@@ -44,8 +68,10 @@
 					<li><a href="#first" class="button big wide smooth-scroll-middle">Get Started</a></li>
 				</ul>
 			</div>
-			<div class="image" style="display:flex; align-items:center; justify-content:center; background:#ffffff;">
+			<div class="image"
+				style="display:flex; align-items:center; justify-content:center; background-color:#ffffff;">
 				<div id="banner-histogram"></div>
+				<div id="tooltip" class="tooltip"></div>
 				<script>
 					(function () {
 						const ages = new Map();
@@ -113,16 +139,12 @@
 								.attr("class", "axis axis-x")
 								.attr("transform", `translate(0, ${height})`)
 								.call(xAxis)
-								//.selectAll("text, line, path")
-								//.style("stroke", "#e0e0e0")
-								//.style("fill", "#e0e0e0");
 
 							chart.append("g")
 								.attr("class", "axis axis-y")
 								.call(d3.axisLeft(scaleY).ticks(11))
-								//.selectAll("text, line, path")
-								//.style("stroke", "#e0e0e0")
-								//.style("fill", "#e0e0e0");
+
+							const tooltip = d3.select("#tooltip");
 
 							chart.selectAll(".bar")
 								.data(ages)
@@ -133,7 +155,26 @@
 								.attr("x", d => scaleX(d[0]) - 30)
 								.attr("fill", "lightblue")
 								.attr("height", d => height - scaleY(d[1]))
-								.attr("width", 60);
+								.attr("width", 60)
+								.on("mouseover", (event, d) => {
+									//d3.select(this)
+									//.attr("stroke", "black")
+									//.attr("stroke-width", 2);
+									tooltip
+										.html(`Age ${d[0]}: ${d[1]} student(s)`)
+										.style("font-family", "Helvetica")
+										.style("opacity", 1);
+								})
+								.on("mousemove", (event) => {
+									tooltip
+										.style("left", (event.clientX + 12) + "px")
+										.style("top", (event.clientY - 28) + "px");
+								})
+								.on("mouseleave", () => {
+									//d3.select(this)
+									//.attr("stroke", none);
+									tooltip.style("opacity", 0);
+								});
 						});
 					})();
 				</script>
@@ -141,10 +182,11 @@
 		</section>
 
 		<!-- Two -->
-		<section class="spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in"
-			id="first">
-			<div class="content">
-				<h2>Magna etiam feugiat</h2>
+		<section
+			class="banner style1 fullscreen orient-right content-align-left image-position-center onscroll-image-fade-in"
+			id="two">
+			<div class="content" style="width: 100%;">
+				<h1>Magna etiam feugiat</h1>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id ante sed ex pharetra lacinia sit
 					amet vel massa. Donec facilisis laoreet nulla eu bibendum. Donec ut ex risus. Fusce lorem lectus,
 					pharetra pretium massa et, hendrerit vestibulum odio lorem ipsum dolor sit amet.</p>
@@ -152,14 +194,13 @@
 					<li><a href="#" class="button">Learn More</a></li>
 				</ul>
 			</div>
-			<div class="image">
-				<img src="images/spotlight01.jpg" alt="" />
-			</div>
+
 		</section>
 
 		<!-- Three -->
-		<section class="spotlight style1 orient-left content-align-left image-position-center onscroll-image-fade-in">
-			<div class="content">
+		<section
+			class="banner style2 fullscreen orient-left content-align-left image-position-center onscroll-image-fade-in onscroll-content-fade-right">
+			<div class="content" style="width: 40%; min-width: 300px;">
 				<h2>Tempus adipiscing</h2>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id ante sed ex pharetra lacinia sit
 					amet vel massa. Donec facilisis laoreet nulla eu bibendum. Donec ut ex risus. Fusce lorem lectus,
@@ -168,8 +209,176 @@
 					<li><a href="#" class="button">Learn More</a></li>
 				</ul>
 			</div>
-			<div class="image">
-				<img src="images/spotlight02.jpg" alt="" />
+			<div class="image"
+				style="display:flex; align-items:right; justify-content:right; background-color:#ffffff;">
+				<div id="banner-splom"></div>
+				<script>
+					(function () {
+						const cellSize = 200;
+						const padding = 100;
+						const svgWidth = 1500;
+						const margin = { top: 40, right: 70, bottom: 60, left: 100 };
+						const width = svgWidth - margin.left - margin.right;
+
+						d3.csv("student-mat.csv", function (data) {
+							return {
+								Free_Time: +data["freetime"],
+								Going_Out: +data["goout"],
+								Family_Relation: +data["famrel"],
+								sex: data["sex"]
+							};
+						}).then(data => {
+							const cols = Object.keys(data[0]).filter(k => k !== "sex");
+							const n = cols.length;
+							const size = n * cellSize;
+
+							const title = d3.select("title")
+								.attr("width", 100)
+								.attr("height", 100)
+								.append("g")
+								.attr("transform", `translate(${0},${0})`);
+
+
+							const legendSpace = 150; // Add space on the right for a legend
+							const svg = d3.select("#banner-splom")
+								.append("svg")
+								.attr("width", size + padding + legendSpace)
+								.attr("height", size + padding)
+								.append("g")
+								.attr("transform", `translate(${padding / 2},${padding / 2})`);
+
+							// One linear scale per column
+							const scales = {};
+							const scalesY = {};
+							cols.forEach(col => {
+								scales[col] = d3.scaleLinear()
+									.domain(d3.extent(data, d => d[col])).nice()
+									.range([10, cellSize - 10]);
+								scalesY[col] = d3.scaleLinear()
+									.domain(d3.extent(data, d => d[col])).nice()
+									.range([cellSize - 10, 10]);
+							});
+
+							svg.append("text")
+								.attr("x", 75)
+								.attr("y", 0)
+								.style("font-family", "Helvetica")
+								.text("Scatterplot Matrix of Students' Time and Priority Management");
+
+							// X axes
+
+							cols.forEach((yCol, row) => {
+								cols.forEach((xCol, col) => {
+									const g = svg.append("g")
+										.attr("transform", `translate(${col * cellSize},${(row + 1) * cellSize + 20})`)
+										.attr("class", "axis axis-x");
+									if (!(row === col || (row === 0 && col === 2) || (row === 1 && col === 0))) {
+										g.call(d3.axisBottom(scales[xCol]).ticks(6));
+									}
+								});
+							});
+
+							// Y axes
+
+							cols.forEach((yCol, row) => {
+								cols.forEach((xCol, col) => {
+									const g = svg.append("g")
+										.attr("transform", `translate(${col * cellSize},${(row) * cellSize + 20})`)
+										.attr("class", "axis axis-x");
+									if (row === col) {
+									} else if (col == 2 || (col == 1 && row == 2)) {
+										g.attr("transform", `translate(${(col + 1) * cellSize},${(row) * cellSize + 20})`)
+										g.call(d3.axisRight(scalesY[yCol]).ticks(6));
+									} else {
+										g.call(d3.axisLeft(scalesY[yCol]).ticks(6));
+									}
+								});
+							});
+
+							// Qualitative color scale from ColorBrewer: https://colorbrewer2.org/#type=qualitative&scheme=Set1&n=5
+							// Used code from the d3-legend page: https://d3-legend.susielu.com/
+							var quantize = d3.scaleOrdinal()
+								.domain(["M", "F"])
+								.range(["#e41a1c", "#377eb8"]);
+
+
+							svg.append("g")
+								.attr("class", "legendQuant")
+								.style("font-family", "Helvetica")
+								.attr("transform", "translate(650,150)");
+
+							let selectedSex = null;
+
+							var legend = d3.legendColor()
+								.labelFormat(d3.format(".0f"))
+								.title("Gender")
+								.titleWidth(100)
+								.scale(quantize);
+
+							svg.select(".legendQuant")
+								.call(legend);
+
+
+							// Filtering the legend in order to fill each cell based on the category being hovered
+							svg.selectAll(".legendQuant .cell")
+								.style("cursor", "pointer")
+								.on("mouseover", function (event, d) {
+									let hoveredVal = d3.select(this).select("text").text();
+
+									svg.selectAll(".splom-point")
+										.attr("fill", function (circleData) {
+											return circleData.sex === hoveredVal ? quantize(circleData.sex) : "#d3d3d3";
+										})
+								})
+								.on("mouseout", function (event, d) {
+									svg.selectAll(".splom-point")
+										.attr("fill", function (circleData) {
+											return quantize(circleData.sex);
+										})
+								});
+
+							// Draw one cell per (row, col) pair
+							cols.forEach((yCol, row) => {
+								cols.forEach((xCol, col) => {
+									const g = svg.append("g")
+										.attr("transform", `translate(${col * cellSize},${row * cellSize + 20})`);
+
+									// Cell border
+									g.append("rect")
+										.attr("width", cellSize)
+										.attr("height", cellSize)
+										.attr("fill", "none")
+										.attr("stroke", "#aaa");
+
+									if (row === col) {
+										// Diagonal: just show the variable name
+										g.append("text")
+											.attr("x", cellSize / 2)
+											.attr("y", cellSize / 2)
+											.attr("text-anchor", "middle")
+											.attr("dominant-baseline", "middle")
+											.attr("font-size", "12px")
+											.style("font-family", "Helvetica")
+											.text(xCol);
+									} else {
+
+										// Off-diagonal: scatter plot
+
+										g.selectAll("circle")
+											.data(data)
+											.join("circle")
+											.attr("class", "splom-point")
+											.attr("cx", d => scales[xCol](d[xCol]) + (Math.random() - 0.5) * 15)
+											.attr("cy", d => scalesY[yCol](d[yCol]) + (Math.random() - 0.5) * 15)
+											.attr("r", 2)
+											.attr("fill", d => quantize(d.sex))
+											.attr("opacity", 0.6);
+									}
+								});
+							});
+						});
+					})();
+				</script>
 			</div>
 		</section>
 
