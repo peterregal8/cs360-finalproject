@@ -34,6 +34,30 @@
 			opacity: 0;
 			transition: opacity 0.15s ease;
 		}
+
+		.tooltip2 {
+			position: fixed;
+			background: rgba(0, 0, 0, 0.75);
+			color: #fff;
+			padding: 6px 10px;
+			border-radius: 4px;
+			font-size: 13px;
+			pointer-events: none;
+			opacity: 0;
+			transition: opacity 0.15s ease;
+		}
+
+		.tooltip3 {
+			position: fixed;
+			background: rgba(0, 0, 0, 0.75);
+			color: #fff;
+			padding: 6px 10px;
+			border-radius: 4px;
+			font-size: 13px;
+			pointer-events: none;
+			opacity: 0;
+			transition: opacity 0.15s ease;
+		}
 	</style>
 </head>
 
@@ -47,11 +71,12 @@
 			id="first">
 			<div class="content" style="width: 100%;">
 				<h1>Student Health: A Case Study of Portugal</h1>
-				<p>Education is a vital aspect of society. I'm interested in the state of education and 
-				student health around the world. As a college student myself, I know that there are a lot 
-				of external factors that affect one’s study habits as well as their inclination to use alcohol 
-				as a possible coping mechanism for dealing with stress. Let's explore a dataset of 395
-				students attending one of two Portuguese secondary schools, Gabriel Pereira and Mousinho da Silveira.</p>
+				<p>Education is a vital aspect of society. I'm interested in the state of education and
+					student health around the world. As a college student myself, I know that there are a lot
+					of external factors that affect one’s study habits as well as their inclination to use alcohol
+					as a possible coping mechanism for dealing with stress. Let's explore a dataset of 395
+					students attending one of two Portuguese secondary schools, Gabriel Pereira and Mousinho da
+					Silveira.</p>
 				<p>Made by Peter Regalbuto with help from <a href="https://html5up.net/story">HTML5UP</a></p>
 			</div>
 		</section>
@@ -59,7 +84,7 @@
 		<!-- One -->
 		<section
 			class="banner style1 orient-left content-align-left image-position-right fullscreen onscroll-image-fade-in onscroll-content-fade-right">
-			<div class="content">
+			<div class="content" style="width: 40%; max-width: 40%; margin-left: 2px;">
 				<h1>Story</h1>
 				<p class="major">A (modular, highly tweakable) responsive one-page template designed by <a
 						href="https://html5up.net">HTML5 UP</a> and released for free under the <a
@@ -78,7 +103,7 @@
 
 						const svgWidth = 800;
 						const svgHeight = 500;
-						const margin = { top: 40, right: 70, bottom: 60, left: 100 };
+						const margin = { top: 40, right: 70, bottom: 60, left: 60 };
 						const width = svgWidth - margin.left - margin.right;
 						const height = svgHeight - margin.top - margin.bottom;
 
@@ -103,10 +128,9 @@
 								.attr("transform", `translate(${margin.left},${margin.top})`);
 
 							svg.append("text")
-								.attr("x", 100)
+								.attr("x", 75)
 								.attr("y", margin.top / 2)
 								.style("font-family", "Helvetica")
-								//.style("fill", "#e0e0e0")
 								.style("font-size", "16px")
 								.text("Distribution of Student Ages in Gabriel Pereira and Mousinho da Silveira Secondary Schools");
 
@@ -114,15 +138,13 @@
 								.attr("x", width / 1.8)
 								.attr("y", svgHeight - margin.bottom + 50)
 								.style("font-family", "Helvetica")
-								//.style("fill", "#e0e0e0")
 								.text("Age");
 
 							svg.append("text")
 								.attr("x", 100)
 								.attr("y", margin.top / 2)
-								.attr("transform", "rotate(270, 210, 165)")
+								.attr("transform", "rotate(270, 200, 195)")
 								.style("font-family", "Helvetica")
-								//.style("fill", "#e0e0e0")
 								.text("# of Students");
 
 							const scaleX = d3.scaleLinear()
@@ -157,9 +179,6 @@
 								.attr("height", d => height - scaleY(d[1]))
 								.attr("width", 60)
 								.on("mouseover", (event, d) => {
-									//d3.select(this)
-									//.attr("stroke", "black")
-									//.attr("stroke-width", 2);
 									tooltip
 										.html(`Age ${d[0]}: ${d[1]} student(s)`)
 										.style("font-family", "Helvetica")
@@ -171,8 +190,6 @@
 										.style("top", (event.clientY - 28) + "px");
 								})
 								.on("mouseleave", () => {
-									//d3.select(this)
-									//.attr("stroke", none);
 									tooltip.style("opacity", 0);
 								});
 						});
@@ -183,18 +200,165 @@
 
 		<!-- Two -->
 		<section
-			class="banner style1 fullscreen orient-right content-align-left image-position-center onscroll-image-fade-in"
+			class="banner style1 fullscreen orient-right content-align-right image-position-center onscroll-image-fade-in onscroll-content-fade-left"
 			id="two">
-			<div class="content" style="width: 100%;">
+			<div class="content" style="width: 40%; max-width: 40%; margin-right: 5px;">
 				<h1>Magna etiam feugiat</h1>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id ante sed ex pharetra lacinia sit
 					amet vel massa. Donec facilisis laoreet nulla eu bibendum. Donec ut ex risus. Fusce lorem lectus,
 					pharetra pretium massa et, hendrerit vestibulum odio lorem ipsum dolor sit amet.</p>
-				<ul class="actions stacked">
-					<li><a href="#" class="button">Learn More</a></li>
-				</ul>
 			</div>
+			<div class="image"
+				style="display:flex; align-items:center; justify-content:left; background-color:#ffffff;">
+				<div id="banner-splom2"></div>
+				<div id="tooltip2" class="tooltip2"></div>
+				<script>
+					(function () {
 
+						const svgWidth = 900;
+						const svgHeight = 500;
+						const margin = { top: 40, right: 150, bottom: 50, left: 100 };
+						const width = svgWidth - margin.left - margin.right;
+						const height = svgHeight - margin.top - margin.bottom;
+
+
+						d3.csv("student-mat.csv", function (data) {
+							return {
+								absences: +data["absences"],
+								g3: +data["G3"],
+								travel: +data["freetime"]
+							};
+						}).then(function (dataset) {
+
+							const svg = d3.select("#banner-splom2")
+								.append("svg")
+								.attr("width", svgWidth + 100)
+								.attr("height", svgHeight);
+
+							const chart = svg.append("g")
+								.attr("transform", `translate(${margin.left},${margin.top})`);
+
+							svg.append("text")
+								.attr("x", width / 3)
+								.attr("y", margin.top / 2)
+								.style("font-family", "Helvetica")
+								.text("Final Grade vs. Number of Absences of all Students");
+
+							svg.append("text")
+								.attr("x", width / 1.75)
+								.attr("y", svgHeight - margin.bottom + 40)
+								.style("font-family", "Helvetica")
+								.text("Final Grade");
+
+							var rotateY = margin.top / 2;
+
+							svg.append("text")
+								.attr("x", 100)
+								.attr("y", margin.top / 2)
+								.attr("transform", "rotate(270, 220, 180)")
+								.style("font-family", "Helvetica")
+								.text("Number of Absences");
+
+							// Scaling and tooltips 
+							const scaleX = d3.scaleLinear()
+								.domain([d3.min(dataset, d => d.g3) - 1, d3.max(dataset, d => d.g3) + 1])
+								.range([0, width]);
+
+							const scaleY = d3.scaleLinear()
+								.domain([0, d3.max(dataset, d => d.absences) + 1])
+								.nice()
+								.range([height, 0]);
+
+							chart.append("g")
+								.attr("class", "axis axis-x")
+								.attr("transform", `translate(0, ${height})`)
+								.call(d3.axisBottom(scaleX));
+
+							chart.append("g")
+								.attr("class", "axis axis-y")
+								.call(d3.axisLeft(scaleY).ticks(5));
+
+							var quantize = d3.scaleSequential(d3.interpolateBlues)
+								.domain(d3.extent(dataset, d => d.travel));
+
+
+							svg.append("g")
+								.attr("class", "legendQuant")
+								.style("font-family", "Helvetica")
+								.attr("transform", "translate(800,150)");
+
+							var legend = d3.legendColor()
+								.labelFormat(d3.format(".0f"))
+								.title("Free Time (1-5)")
+								.titleWidth(100)
+								.scale(quantize);
+
+							svg.select(".legendQuant")
+								.call(legend);
+
+							// Set to track which travel values are selected (multi-select)
+							const selectedTravel = new Set();
+
+							// Click each legend cell to highlight matching points, grey others
+							svg.selectAll(".legendQuant .cell")
+								.style("cursor", "pointer")
+								.on("click", function (event, d) {
+									const clickedVal = +d3.select(this).select("text").text();
+									if (selectedTravel.has(clickedVal)) {
+										selectedTravel.delete(clickedVal);
+									} else {
+										selectedTravel.add(clickedVal);
+									}
+									// Update ALL legend cells: full opacity if selected (or nothing selected), greyed if not
+									svg.selectAll(".legendQuant .cell")
+										.style("opacity", function () {
+											if (selectedTravel.size === 0) return 1;
+											const cellVal = +d3.select(this).select("text").text();
+											return selectedTravel.has(cellVal) ? 1 : 0.3;
+										});
+									svg.selectAll(".sc2-point")
+										.attr("fill", p => {
+											if (selectedTravel.size === 0) return quantize(p.travel);
+											return selectedTravel.has(p.travel) ? quantize(p.travel) : "#d3d3d3";
+										})
+										.attr("opacity", p => {
+											if (selectedTravel.size === 0) return 0.8;
+											return selectedTravel.has(p.travel) ? 0.8 : 0.15;
+										});
+								});
+
+							// Tooltip reference
+							const tooltip2 = d3.select("#tooltip2");
+
+							chart.selectAll(".sc2-point")
+								.data(dataset)
+								.enter()
+								.append("circle")
+								.attr("class", "sc2-point")
+								.attr("cx", d => scaleX(d.g3))
+								.attr("cy", d => scaleY(d.absences))
+								.attr("r", 5)
+								.attr("fill", d => quantize(d.travel))
+								.attr("stroke", "black")
+								.attr("stroke-width", "1px")
+								.on("mouseover", (event, d) => {
+									tooltip2
+										.html(`Grade: ${d.g3} <br/> Absences: ${d.absences} <br/> Free Time: ${d.travel}`)
+										.style("opacity", 1)
+										.style("font-family", "Helvetica");
+								})
+								.on("mousemove", (event) => {
+									tooltip2
+										.style("left", (event.clientX + 12) + "px")
+										.style("top", (event.clientY - 28) + "px");
+								})
+								.on("mouseleave", () => {
+									tooltip2.style("opacity", 0);
+								});
+						});
+					})();
+				</script>
+			</div>
 		</section>
 
 		<!-- Three -->
@@ -217,7 +381,7 @@
 						const cellSize = 200;
 						const padding = 100;
 						const svgWidth = 1500;
-						const margin = { top: 40, right: 70, bottom: 60, left: 100 };
+						const margin = { top: 40, right: 70, bottom: 60, left: 150 };
 						const width = svgWidth - margin.left - margin.right;
 
 						d3.csv("student-mat.csv", function (data) {
@@ -295,8 +459,6 @@
 								});
 							});
 
-							// Qualitative color scale from ColorBrewer: https://colorbrewer2.org/#type=qualitative&scheme=Set1&n=5
-							// Used code from the d3-legend page: https://d3-legend.susielu.com/
 							var quantize = d3.scaleOrdinal()
 								.domain(["M", "F"])
 								.range(["#e41a1c", "#377eb8"]);
@@ -320,6 +482,7 @@
 
 
 							// Filtering the legend in order to fill each cell based on the category being hovered
+							// Used AI to help with this segment
 							svg.selectAll(".legendQuant .cell")
 								.style("cursor", "pointer")
 								.on("mouseover", function (event, d) {
@@ -383,8 +546,9 @@
 		</section>
 
 		<!-- Four -->
-		<section class="spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in">
-			<div class="content">
+		<section
+			class="banner style1 fullscreen orient-right content-align-right image-position-center onscroll-image-fade-in onscroll-content-fade-left">
+			<div class="content" style="width: 40%; max-width: 40%; margin-right: 5px;">
 				<h2>Pharetra etiam nulla</h2>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id ante sed ex pharetra lacinia sit
 					amet vel massa. Donec facilisis laoreet nulla eu bibendum. Donec ut ex risus. Fusce lorem lectus,
@@ -393,295 +557,163 @@
 					<li><a href="#" class="button">Learn More</a></li>
 				</ul>
 			</div>
-			<div class="image">
-				<img src="images/spotlight03.jpg" alt="" />
+			<div class="image"
+				style="display:flex; align-items:center; justify-content:left; background-color:#ffffff;">
+				<div id="chart-container"></div>
+				<div id="tooltip3" class="tooltip3"></div>
+				<script>
+					(function () {
+
+						const heatmapData = new Map();
+
+						const svgWidth = 950;
+						const svgHeight = 500;
+						const margin = { top: 40, right: 125, bottom: 50, left: 100 };
+						const width = svgWidth - margin.left - margin.right;
+						const height = svgHeight - margin.top - margin.bottom;
+
+
+						d3.csv("student-mat.csv", function (data) {
+							return {
+								health: +data["health"],
+								alcohol: +data["Dalc"],
+								songs: +data["Number of Songs"]
+							};
+						}).then(function (dataset) {
+
+							dataset.forEach(d => {
+								const key = `${d.health}-${d.alcohol}`;
+
+								if (heatmapData.has(key)) {
+									heatmapData.set(key, heatmapData.get(key) + 1);
+								} else {
+									heatmapData.set(key, 1);
+								}
+							});
+
+							const allHealth = [1, 2, 3, 4, 5];
+							const allAlcohol = [1, 2, 3, 4, 5];
+
+							const heatmapArray = [];
+
+							allHealth.forEach(health => {
+								allAlcohol.forEach(alcohol => {
+									const key = `${health}-${alcohol}`;
+									heatmapArray.push({
+										health: health,
+										alcohol: alcohol,
+										count: heatmapData.get(key) || 0
+									});
+								});
+							});
+
+							const svg = d3.select("#chart-container")
+								.append("svg")
+								.attr("width", svgWidth)
+								.attr("height", svgHeight);
+
+							const chart = svg.append("g")
+								.attr("transform", `translate(${margin.left},${margin.top})`);
+
+
+							svg.append("text")
+								.attr("x", width / 4)
+								.attr("y", margin.top / 2)
+								.style("font-family", "Helvetica")
+								.text("Distribution of Student Self-Ratings of Alcohol Consumption and Health");
+
+							svg.append("text")
+								.attr("x", width / 2)
+								.attr("y", svgHeight - margin.bottom + 40)
+								.style("font-family", "Helvetica")
+								.text("Weekday Alcohol Consumption");
+
+							var rotateY = margin.top / 2;
+
+							svg.append("text")
+								.attr("x", 100)
+								.attr("y", margin.top / 2)
+								.attr("transform", "rotate(270, 230, 180)")
+								.style("font-family", "Helvetica")
+								.text("Student Health");
+
+
+							// Scaling and tooltips 
+							const scaleY = d3.scaleBand()
+								.domain([1, 2, 3, 4, 5])
+								.range([height, 0])
+
+							const scaleX = d3.scaleBand()
+								.domain([1, 2, 3, 4, 5])
+								.range([0, width]);
+
+
+							chart.append("g")
+								.attr("class", "axis axis-x")
+								.attr("transform", `translate(0, ${height})`)
+								.call(d3.axisBottom(scaleX));
+
+							chart.append("g")
+								.attr("class", "axis axis-y")
+								.call(d3.axisLeft(scaleY).ticks(5));
+
+							const quantize = d3.scaleSequential()
+								.domain([0, d3.max(heatmapArray, d => d.count)])
+								.interpolator(d3.interpolateBlues);
+
+							svg.append("g")
+								.attr("class", "legendQuant")
+								.style("font-family", "Helvetica")
+								.attr("transform", "translate(850,150)");
+
+							var legend = d3.legendColor()
+								.labelFormat(d3.format(".0f"))
+								.title("Students")
+								.titleWidth(100)
+								.scale(quantize);
+
+							svg.select(".legendQuant")
+								.call(legend);
+
+							// Tooltip reference
+							const tooltip3 = d3.select("#tooltip3");
+
+							// Add bars with tooltip events
+							chart.selectAll(".bar")
+								.data(heatmapArray)
+								.enter()
+								.append("rect")
+								.attr("class", "bar")
+								.attr("y", d => scaleY(d.health))
+								.attr("x", d => scaleX(d.alcohol))
+								.attr("height", scaleY.bandwidth())
+								.attr("fill", d => quantize(d.count))
+								.attr("width", scaleX.bandwidth())
+								.on("mouseover", (event, d) => {
+									tooltip3
+										.html(`Alcohol Consumption: ${d.alcohol} <br/> Health: ${d.health} <br/> Count: ${d.count}`)
+										.style("font-family", "Helvetica")
+										.style("opacity", 1);
+								})
+								.on("mousemove", (event) => {
+									tooltip3
+										.style("left", (event.clientX + 12) + "px")
+										.style("top", (event.clientY - 28) + "px");
+								})
+								.on("mouseleave", () => {
+									tooltip3.style("opacity", 0);
+								});
+						});
+					})();
+				</script>
 			</div>
 		</section>
 
-		<!-- Five -->
-		<section class="wrapper style1 align-center">
-			<div class="inner">
-				<h2>Massa sed condimentum</h2>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id ante sed ex pharetra lacinia sit
-					amet vel massa. Donec facilisis laoreet nulla eu bibendum. Donec ut ex risus. Fusce lorem lectus,
-					pharetra pretium massa et, hendrerit vestibulum odio lorem ipsum.</p>
-			</div>
-
-			<!-- Gallery -->
-			<div class="gallery style2 medium lightbox onscroll-fade-in">
-				<article>
-					<a href="images/gallery/fulls/01.jpg" class="image">
-						<img src="images/gallery/thumbs/01.jpg" alt="" />
-					</a>
-					<div class="caption">
-						<h3>Ipsum Dolor</h3>
-						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
-						<ul class="actions fixed">
-							<li><span class="button small">Details</span></li>
-						</ul>
-					</div>
-				</article>
-				<article>
-					<a href="images/gallery/fulls/02.jpg" class="image">
-						<img src="images/gallery/thumbs/02.jpg" alt="" />
-					</a>
-					<div class="caption">
-						<h3>Feugiat Lorem</h3>
-						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
-						<ul class="actions fixed">
-							<li><span class="button small">Details</span></li>
-						</ul>
-					</div>
-				</article>
-				<article>
-					<a href="images/gallery/fulls/03.jpg" class="image">
-						<img src="images/gallery/thumbs/03.jpg" alt="" />
-					</a>
-					<div class="caption">
-						<h3>Magna Amet</h3>
-						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
-						<ul class="actions fixed">
-							<li><span class="button small">Details</span></li>
-						</ul>
-					</div>
-				</article>
-				<article>
-					<a href="images/gallery/fulls/04.jpg" class="image">
-						<img src="images/gallery/thumbs/04.jpg" alt="" />
-					</a>
-					<div class="caption">
-						<h3>Sed Tempus</h3>
-						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
-						<ul class="actions fixed">
-							<li><span class="button small">Details</span></li>
-						</ul>
-					</div>
-				</article>
-				<article>
-					<a href="images/gallery/fulls/05.jpg" class="image">
-						<img src="images/gallery/thumbs/05.jpg" alt="" />
-					</a>
-					<div class="caption">
-						<h3>Ultrices Magna</h3>
-						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
-						<ul class="actions fixed">
-							<li><span class="button small">Details</span></li>
-						</ul>
-					</div>
-				</article>
-				<article>
-					<a href="images/gallery/fulls/06.jpg" class="image">
-						<img src="images/gallery/thumbs/06.jpg" alt="" />
-					</a>
-					<div class="caption">
-						<h3>Sed Tempus</h3>
-						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
-						<ul class="actions fixed">
-							<li><span class="button small">Details</span></li>
-						</ul>
-					</div>
-				</article>
-				<article>
-					<a href="images/gallery/fulls/07.jpg" class="image">
-						<img src="images/gallery/thumbs/07.jpg" alt="" />
-					</a>
-					<div class="caption">
-						<h3>Ipsum Lorem</h3>
-						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
-						<ul class="actions fixed">
-							<li><span class="button small">Details</span></li>
-						</ul>
-					</div>
-				</article>
-				<article>
-					<a href="images/gallery/fulls/08.jpg" class="image">
-						<img src="images/gallery/thumbs/08.jpg" alt="" />
-					</a>
-					<div class="caption">
-						<h3>Magna Risus</h3>
-						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
-						<ul class="actions fixed">
-							<li><span class="button small">Details</span></li>
-						</ul>
-					</div>
-				</article>
-				<article>
-					<a href="images/gallery/fulls/09.jpg" class="image">
-						<img src="images/gallery/thumbs/09.jpg" alt="" />
-					</a>
-					<div class="caption">
-						<h3>Tempus Dolor</h3>
-						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
-						<ul class="actions fixed">
-							<li><span class="button small">Details</span></li>
-						</ul>
-					</div>
-				</article>
-				<article>
-					<a href="images/gallery/fulls/10.jpg" class="image">
-						<img src="images/gallery/thumbs/10.jpg" alt="" />
-					</a>
-					<div class="caption">
-						<h3>Sed Etiam</h3>
-						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
-						<ul class="actions fixed">
-							<li><span class="button small">Details</span></li>
-						</ul>
-					</div>
-				</article>
-				<article>
-					<a href="images/gallery/fulls/11.jpg" class="image">
-						<img src="images/gallery/thumbs/11.jpg" alt="" />
-					</a>
-					<div class="caption">
-						<h3>Magna Lorem</h3>
-						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
-						<ul class="actions fixed">
-							<li><span class="button small">Details</span></li>
-						</ul>
-					</div>
-				</article>
-				<article>
-					<a href="images/gallery/fulls/12.jpg" class="image">
-						<img src="images/gallery/thumbs/12.jpg" alt="" />
-					</a>
-					<div class="caption">
-						<h3>Ipsum Dolor</h3>
-						<p>Lorem ipsum dolor amet, consectetur magna etiam elit. Etiam sed ultrices.</p>
-						<ul class="actions fixed">
-							<li><span class="button small">Details</span></li>
-						</ul>
-					</div>
-				</article>
-			</div>
-
-		</section>
-
-		<!-- Six -->
-		<section class="wrapper style1 align-center">
-			<div class="inner">
-				<h2>Ipsum sed consequat</h2>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id ante sed ex pharetra lacinia sit
-					amet vel massa. Donec facilisis laoreet nulla eu bibendum. Donec ut ex risus. Fusce lorem lectus,
-					pharetra pretium massa et, hendrerit vestibulum odio lorem ipsum.</p>
-				<div class="items style1 medium onscroll-fade-in">
-					<section>
-						<span class="icon style2 major fa-gem"></span>
-						<h3>Lorem</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
-							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
-					</section>
-					<section>
-						<span class="icon solid style2 major fa-save"></span>
-						<h3>Ipsum</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
-							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
-					</section>
-					<section>
-						<span class="icon solid style2 major fa-chart-bar"></span>
-						<h3>Dolor</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
-							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
-					</section>
-					<section>
-						<span class="icon solid style2 major fa-wifi"></span>
-						<h3>Amet</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
-							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
-					</section>
-					<section>
-						<span class="icon solid style2 major fa-cog"></span>
-						<h3>Magna</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
-							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
-					</section>
-					<section>
-						<span class="icon style2 major fa-paper-plane"></span>
-						<h3>Tempus</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
-							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
-					</section>
-					<section>
-						<span class="icon solid style2 major fa-desktop"></span>
-						<h3>Aliquam</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
-							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
-					</section>
-					<section>
-						<span class="icon solid style2 major fa-sync-alt"></span>
-						<h3>Elit</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
-							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
-					</section>
-					<section>
-						<span class="icon solid style2 major fa-hashtag"></span>
-						<h3>Morbi</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
-							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
-					</section>
-					<section>
-						<span class="icon solid style2 major fa-bolt"></span>
-						<h3>Turpis</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
-							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
-					</section>
-					<section>
-						<span class="icon solid style2 major fa-envelope"></span>
-						<h3>Ultrices</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
-							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
-					</section>
-					<section>
-						<span class="icon solid style2 major fa-leaf"></span>
-						<h3>Risus</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dui turpis, cursus eget orci
-							amet aliquam congue semper. Etiam eget ultrices risus nec tempor elit.</p>
-					</section>
-				</div>
-			</div>
-		</section>
-
-		<!-- Seven -->
-		<section class="wrapper style1 align-center">
-			<div class="inner medium">
-				<h2>Get in touch</h2>
-				<form method="post" action="#">
-					<div class="fields">
-						<div class="field half">
-							<label for="name">Name</label>
-							<input type="text" name="name" id="name" value="" />
-						</div>
-						<div class="field half">
-							<label for="email">Email</label>
-							<input type="email" name="email" id="email" value="" />
-						</div>
-						<div class="field">
-							<label for="message">Message</label>
-							<textarea name="message" id="message" rows="6"></textarea>
-						</div>
-					</div>
-					<ul class="actions special">
-						<li><input type="submit" name="submit" id="submit" value="Send Message" /></li>
-					</ul>
-				</form>
-
-			</div>
-		</section>
 
 		<!-- Footer -->
 		<footer class="wrapper style1 align-center">
 			<div class="inner">
-				<ul class="icons">
-					<li><a href="#" class="icon brands style2 fa-twitter"><span class="label">Twitter</span></a></li>
-					<li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a>
-					</li>
-					<li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a>
-					</li>
-					<li><a href="#" class="icon brands style2 fa-linkedin-in"><span class="label">LinkedIn</span></a>
-					</li>
-					<li><a href="#" class="icon style2 fa-envelope"><span class="label">Email</span></a></li>
-				</ul>
-				<p>&copy; Untitled. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+				<p>&copy; Peter Regalbuto. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
 			</div>
 		</footer>
 
