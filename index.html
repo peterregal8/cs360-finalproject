@@ -71,7 +71,7 @@
 			id="first">
 			<div class="content" style="width: 100%;">
 				<h1>Student Health: A Case Study of Portugal</h1>
-				<p>Education is a vital aspect of society. I'm interested in the state of education and
+				<p class="major">Education is a vital aspect of society. I'm interested in the state of education and
 					student health around the world. As a college student myself, I know that there are a lot
 					of external factors that affect one’s study habits as well as their inclination to use alcohol
 					as a possible coping mechanism for dealing with stress. Let's explore a dataset of 395
@@ -85,13 +85,10 @@
 		<section
 			class="banner style1 orient-left content-align-left image-position-right fullscreen onscroll-image-fade-in onscroll-content-fade-right">
 			<div class="content" style="width: 40%; max-width: 40%; margin-left: 2px;">
-				<h1>Story</h1>
-				<p class="major">A (modular, highly tweakable) responsive one-page template designed by <a
-						href="https://html5up.net">HTML5 UP</a> and released for free under the <a
-						href="https://html5up.net/license">Creative Commons</a>.</p>
-				<ul class="actions stacked">
-					<li><a href="#first" class="button big wide smooth-scroll-middle">Get Started</a></li>
-				</ul>
+				<h2>Age: an expected distribution</h2>
+				<p>The vast majority of students range from 15 to 18 years old. Interestingly,
+					there are 5 students age 20 and above, suggesting they may have had to redo a grade level.
+				</p>
 			</div>
 			<div class="image"
 				style="display:flex; align-items:center; justify-content:center; background-color:#ffffff;">
@@ -203,10 +200,11 @@
 			class="banner style1 fullscreen orient-right content-align-right image-position-center onscroll-image-fade-in onscroll-content-fade-left"
 			id="two">
 			<div class="content" style="width: 40%; max-width: 40%; margin-right: 5px;">
-				<h1>Magna etiam feugiat</h1>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id ante sed ex pharetra lacinia sit
-					amet vel massa. Donec facilisis laoreet nulla eu bibendum. Donec ut ex risus. Fusce lorem lectus,
-					pharetra pretium massa et, hendrerit vestibulum odio lorem ipsum dolor sit amet.</p>
+				<h2>Grades aren't everything</h2>
+				<p>This scatterplot allows you to filter the total student population by their self reported
+					amount of free time. The largest outlier is the student with 75 absences, but with a final grade
+					of 9. The data looks remarkably similar to a normal distribution. In general, students with the highest
+					grades have the fewest number of absences, with free time having a weak correlation all around.</p>
 			</div>
 			<div class="image"
 				style="display:flex; align-items:center; justify-content:left; background-color:#ffffff;">
@@ -296,10 +294,10 @@
 							svg.select(".legendQuant")
 								.call(legend);
 
-							// Set to track which travel values are selected (multi-select)
+							// Used AI to help with this segment
+
 							const selectedTravel = new Set();
 
-							// Click each legend cell to highlight matching points, grey others
 							svg.selectAll(".legendQuant .cell")
 								.style("cursor", "pointer")
 								.on("click", function (event, d) {
@@ -309,7 +307,6 @@
 									} else {
 										selectedTravel.add(clickedVal);
 									}
-									// Update ALL legend cells: full opacity if selected (or nothing selected), greyed if not
 									svg.selectAll(".legendQuant .cell")
 										.style("opacity", function () {
 											if (selectedTravel.size === 0) return 1;
@@ -343,7 +340,7 @@
 								.attr("stroke-width", "1px")
 								.on("mouseover", (event, d) => {
 									tooltip2
-										.html(`Grade: ${d.g3} <br/> Absences: ${d.absences} <br/> Free Time: ${d.travel}`)
+										.html(`Final Grade: ${d.g3} <br/> Absences: ${d.absences} <br/> Free Time: ${d.travel}/5`)
 										.style("opacity", 1)
 										.style("font-family", "Helvetica");
 								})
@@ -365,13 +362,11 @@
 		<section
 			class="banner style2 fullscreen orient-left content-align-left image-position-center onscroll-image-fade-in onscroll-content-fade-right">
 			<div class="content" style="width: 40%; min-width: 300px;">
-				<h2>Tempus adipiscing</h2>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id ante sed ex pharetra lacinia sit
-					amet vel massa. Donec facilisis laoreet nulla eu bibendum. Donec ut ex risus. Fusce lorem lectus,
-					pharetra pretium massa et, hendrerit vestibulum odio lorem ipsum dolor sit amet.</p>
-				<ul class="actions stacked">
-					<li><a href="#" class="button">Learn More</a></li>
-				</ul>
+				<h2>Student Priorities</h2>
+				<p>On a typical school day, students have the choice of relaxing, going out for
+					activities with friends, and spending time with family. All three of these factors are plotted
+					against each other in this scatterplot matrix, categorized into male and female. There's a general
+					positive trend, with many of the outliers on the lower end representing female students.</p>
 			</div>
 			<div class="image"
 				style="display:flex; align-items:right; justify-content:right; background-color:#ffffff;">
@@ -482,7 +477,7 @@
 
 
 							// Filtering the legend in order to fill each cell based on the category being hovered
-							// Used AI to help with this segment
+							
 							svg.selectAll(".legendQuant .cell")
 								.style("cursor", "pointer")
 								.on("mouseover", function (event, d) {
@@ -549,13 +544,11 @@
 		<section
 			class="banner style1 fullscreen orient-right content-align-right image-position-center onscroll-image-fade-in onscroll-content-fade-left">
 			<div class="content" style="width: 40%; max-width: 40%; margin-right: 5px;">
-				<h2>Pharetra etiam nulla</h2>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id ante sed ex pharetra lacinia sit
-					amet vel massa. Donec facilisis laoreet nulla eu bibendum. Donec ut ex risus. Fusce lorem lectus,
-					pharetra pretium massa et, hendrerit vestibulum odio lorem ipsum dolor sit amet.</p>
-				<ul class="actions stacked">
-					<li><a href="#" class="button">Learn More</a></li>
-				</ul>
+				<h2>Students are staying sober</h2>
+				<p>The vast majority of students hardly drink, with over 250 reporting their average weekday
+					alcohol consumption a 1 out of 5. What I didn't expect was how many students 
+					also rated their health a 3 or below. This demonstrates some of the external stressors students 
+					are dealing with and those impacts on their health.</p>
 			</div>
 			<div class="image"
 				style="display:flex; align-items:center; justify-content:left; background-color:#ffffff;">
@@ -691,7 +684,7 @@
 								.attr("width", scaleX.bandwidth())
 								.on("mouseover", (event, d) => {
 									tooltip3
-										.html(`Alcohol Consumption: ${d.alcohol} <br/> Health: ${d.health} <br/> Count: ${d.count}`)
+										.html(`Alcohol Consumption: ${d.alcohol}/5 <br/> Health: ${d.health}/5 <br/> Count: ${d.count}`)
 										.style("font-family", "Helvetica")
 										.style("opacity", 1);
 								})
