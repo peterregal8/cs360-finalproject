@@ -16,6 +16,19 @@
 	</noscript>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+	<script>
+		(function () {
+			window.chartContainerWidth = function (el, min, max, gutter) {
+				min = min || 400;
+				max = max || 1650;
+				gutter = typeof gutter === 'number' ? gutter : 40;
+				if (!el) return min;
+				var wrap = el.closest('.image');
+				var raw = wrap ? wrap.getBoundingClientRect().width : window.innerWidth * 0.48;
+				return Math.round(Math.max(min, Math.min(max, raw - gutter)));
+			};
+		})();
+	</script>
 	<style>
 		/* Tooltip styles */
 		.bar:hover {
@@ -58,6 +71,29 @@
 			opacity: 0;
 			transition: opacity 0.15s ease;
 		}
+
+		/* Hero (section 1): let the image show through the text panel */
+		#first.banner.style2 .content {
+			background-color: rgba(255, 255, 255, 0.82);
+		}
+
+		/* d3-legend title text (class legendTitle): Grade vs absences + SPLOM */
+		#banner-splom2 .legendQuant .legendTitle,
+		#banner-splom .legendQuant .legendTitle {
+			font-size: 18px;
+		}
+
+		/* Data & Methodology (#last): theme uses align-self:center on .banner.style1 .content — pin to top */
+		#last.banner.style1 .content {
+			align-self: flex-start;
+		}
+
+		@media screen and (orientation: portrait) {
+			#last.banner.style1 .content {
+				justify-content: flex-start;
+			}
+		}
+
 	</style>
 </head>
 
@@ -67,31 +103,37 @@
 	<div id="wrapper" class="divided">
 
 		<section
-			class="banner style1 fullscreen orient-right content-align-left image-position-center onscroll-image-fade-in onload-content-fade-in"
+			class="banner style2 fullscreen orient-right content-align-left image-position-center onscroll-image-fade-in onload-content-fade-in"
 			id="first">
 			<div class="content" style="width: 100%;">
 				<h1>Student Health: A Case Study of Portugal</h1>
+				<h2>Made by Peter Regalbuto</h2>
 				<p class="major">Education is a vital aspect of society. I'm interested in the state of education and
 					student health around the world. As a college student myself, I know that there are a lot
 					of external factors that affect one’s study habits as well as their inclination to use alcohol
 					as a possible coping mechanism for dealing with stress. Let's explore a dataset of 395
 					students attending one of two Portuguese secondary schools, Gabriel Pereira and Mousinho da
 					Silveira.</p>
-				<p>Made by Peter Regalbuto with help from <a href="https://html5up.net/story">HTML5UP</a></p>
+				<p>Featured image: <a href="https://www.projectual.pt/en/project/rehabilitation-of-gabriel-pereira-school/">Gabriel Pereira Secondary School</a></p>
+			</div>
+			<div class="image">
+				<img src="assets/images/pereira.png" alt="Pereira School">
 			</div>
 		</section>
 
 		<!-- One -->
 		<section
-			class="banner style1 orient-left content-align-left image-position-right fullscreen onscroll-image-fade-in onscroll-content-fade-right">
+			id="section-age"
+			class="banner style1 orient-left content-align-left image-position-right fullscreen onscroll-image-fade-in onscroll-content-fade-right"
+			style="background-color: #ffffff;">
 			<div class="content" style="width: 40%; max-width: 40%; margin-left: 2px;">
 				<h2>Age: an expected distribution</h2>
-				<p>The vast majority of students range from 15 to 18 years old. Interestingly,
+				<p class="major">The vast majority of students range from 15 to 18 years old. Interestingly,
 					there are 5 students age 20 and above, suggesting they may have had to redo a grade level.
 				</p>
 			</div>
 			<div class="image"
-				style="display:flex; align-items:center; justify-content:center; background-color:#ffffff;">
+				style="display:flex; align-items:center; justify-content:center; background-color:transparent;">
 				<div id="banner-histogram"></div>
 				<div id="tooltip" class="tooltip"></div>
 				<script>
@@ -158,10 +200,14 @@
 								.attr("class", "axis axis-x")
 								.attr("transform", `translate(0, ${height})`)
 								.call(xAxis)
+								.selectAll(".tick text")
+								.style("font-size", "15px");
 
 							chart.append("g")
 								.attr("class", "axis axis-y")
 								.call(d3.axisLeft(scaleY).ticks(11))
+								.selectAll(".tick text")
+								.style("font-size", "15px");
 
 							const tooltip = d3.select("#tooltip");
 
@@ -197,17 +243,21 @@
 
 		<!-- Two -->
 		<section
+			id="section-grades"
 			class="banner style1 fullscreen orient-right content-align-right image-position-center onscroll-image-fade-in onscroll-content-fade-left"
-			id="two">
+			style="background-color: #ffffff;">
 			<div class="content" style="width: 40%; max-width: 40%; margin-right: 5px;">
 				<h2>Grades aren't everything</h2>
-				<p>This scatterplot allows you to filter the total student population by their self reported
+				<p class="major">This scatterplot allows you to filter the total student population by their self reported
 					amount of free time. The largest outlier is the student with 75 absences, but with a final grade
 					of 9. The data looks remarkably similar to a normal distribution. In general, students with the highest
 					grades have the fewest number of absences, with free time having a weak correlation all around.</p>
+				<p class="major" style="font-size: 14px;">
+					Free Time - Free time after school: 1 (very low) - 5 (very high)
+				</p>
 			</div>
 			<div class="image"
-				style="display:flex; align-items:center; justify-content:left; background-color:#ffffff;">
+				style="display:flex; align-items:center; justify-content:left; background-color:transparent;">
 				<div id="banner-splom2"></div>
 				<div id="tooltip2" class="tooltip2"></div>
 				<script>
@@ -216,7 +266,7 @@
 						const svgWidth = 900;
 						const svgHeight = 500;
 						const margin = { top: 40, right: 150, bottom: 50, left: 100 };
-						const width = svgWidth - margin.left - margin.right;
+						const width = svgWidth - margin.left - margin.right + 200;
 						const height = svgHeight - margin.top - margin.bottom;
 
 
@@ -230,7 +280,7 @@
 
 							const svg = d3.select("#banner-splom2")
 								.append("svg")
-								.attr("width", svgWidth + 100)
+								.attr("width", svgWidth + 200)
 								.attr("height", svgHeight);
 
 							const chart = svg.append("g")
@@ -270,11 +320,15 @@
 							chart.append("g")
 								.attr("class", "axis axis-x")
 								.attr("transform", `translate(0, ${height})`)
-								.call(d3.axisBottom(scaleX));
+								.call(d3.axisBottom(scaleX))
+								.selectAll(".tick text")
+								.style("font-size", "15px");
 
 							chart.append("g")
 								.attr("class", "axis axis-y")
-								.call(d3.axisLeft(scaleY).ticks(5));
+								.call(d3.axisLeft(scaleY).ticks(5))
+								.selectAll(".tick text")
+								.style("font-size", "15px");
 
 							var quantize = d3.scaleSequential(d3.interpolateBlues)
 								.domain(d3.extent(dataset, d => d.travel));
@@ -283,12 +337,16 @@
 							svg.append("g")
 								.attr("class", "legendQuant")
 								.style("font-family", "Helvetica")
-								.attr("transform", "translate(800,150)");
+								.attr("transform", "translate(800,50)");
 
 							var legend = d3.legendColor()
 								.labelFormat(d3.format(".0f"))
-								.title("Free Time (1-5)")
-								.titleWidth(100)
+								.title("Free Time (Click to Filter)")
+								.titleWidth(180)
+								.shapeWidth(18)
+								.shapeHeight(18)
+								.shapePadding(10)
+								.labelOffset(14)
 								.scale(quantize);
 
 							svg.select(".legendQuant")
@@ -332,9 +390,9 @@
 								.enter()
 								.append("circle")
 								.attr("class", "sc2-point")
-								.attr("cx", d => scaleX(d.g3))
+								.attr("cx", d => scaleX(d.g3) +(Math.random() - 0.5) * 25)
 								.attr("cy", d => scaleY(d.absences))
-								.attr("r", 5)
+								.attr("r", 4)
 								.attr("fill", d => quantize(d.travel))
 								.attr("stroke", "black")
 								.attr("stroke-width", "1px")
@@ -360,21 +418,27 @@
 
 		<!-- Three -->
 		<section
-			class="banner style2 fullscreen orient-left content-align-left image-position-center onscroll-image-fade-in onscroll-content-fade-right">
+			id="section-priorities"
+			class="banner style2 fullscreen orient-left content-align-left image-position-center onscroll-image-fade-in onscroll-content-fade-right"
+			style="background-color: #ffffff;">
 			<div class="content" style="width: 40%; min-width: 300px;">
-				<h2>Student Priorities</h2>
-				<p>On a typical school day, students have the choice of relaxing, going out for
+				<h2>Student priorities</h2>
+				<p class="major">On a typical school day, students have the choice of relaxing, going out for
 					activities with friends, and spending time with family. All three of these factors are plotted
 					against each other in this scatterplot matrix, categorized into male and female. There's a general
 					positive trend, with many of the outliers on the lower end representing female students.</p>
+				<p class="major" style="font-size: 14px;">
+				   Free_Time - Free time after school: 1 (very low) - 5 (very high)</br>
+				   Going_Out - Time spent out with friends: 1 (very low) - 5 (very high)</br>
+				   Family_Relation - Quality of family relationships: 1 (very low) - 5 (very high)</p>
 			</div>
 			<div class="image"
-				style="display:flex; align-items:right; justify-content:right; background-color:#ffffff;">
+				style="display:flex; align-items:center; justify-content:flex-end; background-color:transparent;">
 				<div id="banner-splom"></div>
 				<script>
 					(function () {
-						const cellSize = 200;
-						const padding = 100;
+						const cellSize = 224;
+						const padding = 150;
 						const svgWidth = 1500;
 						const margin = { top: 40, right: 70, bottom: 60, left: 150 };
 						const width = svgWidth - margin.left - margin.right;
@@ -395,16 +459,16 @@
 								.attr("width", 100)
 								.attr("height", 100)
 								.append("g")
-								.attr("transform", `translate(${0},${0})`);
+								.attr("transform", `translate(${width / 2},${0})`);
 
 
-							const legendSpace = 150; // Add space on the right for a legend
+							const legendSpace = 260; // Reserve space for wider d3-legend (swatches + labels)
 							const svg = d3.select("#banner-splom")
 								.append("svg")
 								.attr("width", size + padding + legendSpace)
 								.attr("height", size + padding)
 								.append("g")
-								.attr("transform", `translate(${padding / 2},${padding / 2})`);
+								.attr("transform", `translate(${220},${padding / 2})`);
 
 							// One linear scale per column
 							const scales = {};
@@ -432,7 +496,9 @@
 										.attr("transform", `translate(${col * cellSize},${(row + 1) * cellSize + 20})`)
 										.attr("class", "axis axis-x");
 									if (!(row === col || (row === 0 && col === 2) || (row === 1 && col === 0))) {
-										g.call(d3.axisBottom(scales[xCol]).ticks(6));
+										g.call(d3.axisBottom(scales[xCol]).ticks(5).tickFormat(d3.format(".0f")))
+											.selectAll(".tick text")
+											.style("font-size", "14px");
 									}
 								});
 							});
@@ -444,12 +510,16 @@
 									const g = svg.append("g")
 										.attr("transform", `translate(${col * cellSize},${(row) * cellSize + 20})`)
 										.attr("class", "axis axis-x");
-									if (row === col) {
-									} else if (col == 2 || (col == 1 && row == 2)) {
+									if (row === col || (col == 1 && row == 2)) {
+									} else if (col == 2) {
 										g.attr("transform", `translate(${(col + 1) * cellSize},${(row) * cellSize + 20})`)
-										g.call(d3.axisRight(scalesY[yCol]).ticks(6));
+										g.call(d3.axisRight(scalesY[yCol]).ticks(5).tickFormat(d3.format(".0f")))
+											.selectAll(".tick text")
+											.style("font-size", "14px");
 									} else {
-										g.call(d3.axisLeft(scalesY[yCol]).ticks(6));
+										g.call(d3.axisLeft(scalesY[yCol]).ticks(5).tickFormat(d3.format(".0f")))
+											.selectAll(".tick text")
+											.style("font-size", "14px");
 									}
 								});
 							});
@@ -462,14 +532,18 @@
 							svg.append("g")
 								.attr("class", "legendQuant")
 								.style("font-family", "Helvetica")
-								.attr("transform", "translate(650,150)");
+								.attr("transform", "translate(700,150)");
 
 							let selectedSex = null;
 
 							var legend = d3.legendColor()
 								.labelFormat(d3.format(".0f"))
-								.title("Gender")
-								.titleWidth(100)
+								.title("Gender (Hover to Filter)")
+								.titleWidth(180)
+								.shapeWidth(18)
+								.shapeHeight(18)
+								.shapePadding(10)
+								.labelOffset(14)
 								.scale(quantize);
 
 							svg.select(".legendQuant")
@@ -526,9 +600,9 @@
 											.data(data)
 											.join("circle")
 											.attr("class", "splom-point")
-											.attr("cx", d => scales[xCol](d[xCol]) + (Math.random() - 0.5) * 15)
-											.attr("cy", d => scalesY[yCol](d[yCol]) + (Math.random() - 0.5) * 15)
-											.attr("r", 2)
+											.attr("cx", d => scales[xCol](d[xCol]) + (Math.random() - 0.5) * 20)
+											.attr("cy", d => scalesY[yCol](d[yCol]) + (Math.random() - 0.5) * 20)
+											.attr("r", 4)
 											.attr("fill", d => quantize(d.sex))
 											.attr("opacity", 0.6);
 									}
@@ -542,16 +616,22 @@
 
 		<!-- Four -->
 		<section
-			class="banner style1 fullscreen orient-right content-align-right image-position-center onscroll-image-fade-in onscroll-content-fade-left">
+			id="section-health"
+			class="banner style1 fullscreen orient-right content-align-right image-position-center onscroll-image-fade-in onscroll-content-fade-left"
+			style="background-color: #ffffff;">
 			<div class="content" style="width: 40%; max-width: 40%; margin-right: 5px;">
 				<h2>Students are staying sober</h2>
-				<p>The vast majority of students hardly drink, with over 250 reporting their average weekday
+				<p class="major">The vast majority of students hardly drink, with over 250 reporting their average weekday
 					alcohol consumption a 1 out of 5. What I didn't expect was how many students 
 					also rated their health a 3 or below. This demonstrates some of the external stressors students 
 					are dealing with and those impacts on their health.</p>
+				<p class="major" style="font-size: 14px;">
+					Student Health - Students' current health status: 1 (very bad) - 5 (very good)</br>
+					Weekday Alcohol Consumption - Amount of alcohol consumed on an average weekday: 1 (very low) - 5 (very high)</br>
+				</p>
 			</div>
 			<div class="image"
-				style="display:flex; align-items:center; justify-content:left; background-color:#ffffff;">
+				style="display:flex; align-items:center; justify-content:left; background-color:transparent;">
 				<div id="chart-container"></div>
 				<div id="tooltip3" class="tooltip3"></div>
 				<script>
@@ -644,11 +724,15 @@
 							chart.append("g")
 								.attr("class", "axis axis-x")
 								.attr("transform", `translate(0, ${height})`)
-								.call(d3.axisBottom(scaleX));
+								.call(d3.axisBottom(scaleX))
+								.selectAll(".tick text")
+								.style("font-size", "15px");
 
 							chart.append("g")
 								.attr("class", "axis axis-y")
-								.call(d3.axisLeft(scaleY).ticks(5));
+								.call(d3.axisLeft(scaleY).ticks(5))
+								.selectAll(".tick text")
+								.style("font-size", "15px");
 
 							const quantize = d3.scaleSequential()
 								.domain([0, d3.max(heatmapArray, d => d.count)])
@@ -662,7 +746,11 @@
 							var legend = d3.legendColor()
 								.labelFormat(d3.format(".0f"))
 								.title("Students")
-								.titleWidth(100)
+								.titleWidth(180)
+								.shapeWidth(18)
+								.shapeHeight(18)
+								.shapePadding(10)
+								.labelOffset(14)
 								.scale(quantize);
 
 							svg.select(".legendQuant")
@@ -703,10 +791,31 @@
 		</section>
 
 
+		<!-- Five -->
+		<section
+			class="spotlight style1 fullscreen orient-right content-align-left image-position-center onscroll-image-fade-in onload-content-fade-in"
+			id="last">
+			<div class="content" style="width: 100%;">
+				<h2>Data & Methodology</h2>
+				<p>The data used for this project was downloaded from Kaggle. No data cleaning methods
+					were used; I was able to use the data directly from the CSV file. The overall website
+					was built upon the Story template from HTML5UP, using banners and spotlights for for each
+					individual section. For the visualizations, I used D3.js, as well as d3-legend by Suzie Lu 
+					for the color legends. <br><br>
+					I used AI to help with the implementation of the legend-based tooltips. The filtering for the 
+					scatterplot was implemented using a set, where a value is added once a user clicks on it, 
+					and the corresponding data points are only colored in if their value is part of the set.
+					I also used AI to help with the CSS; specifically figuring out how to make the hero content
+					background transparent. 
+				</p>
+			</div>
+		</section>
+
 		<!-- Footer -->
 		<footer class="wrapper style1 align-center">
 			<div class="inner">
-				<p>&copy; Peter Regalbuto. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+				<p>&copy; Peter Regalbuto. Design: <a href="https://html5up.net/story">HTML5 UP</a>.</p>
+				<p>Data: <a href="https://www.kaggle.com/datasets/uciml/student-alcohol-consumption">Student Alcohol Consumption</a> • <a href="https://github.com/peterregal8/cs360-finalproject">GitHub</a></p>
 			</div>
 		</footer>
 
